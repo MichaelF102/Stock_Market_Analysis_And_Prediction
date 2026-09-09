@@ -308,11 +308,3 @@ st.markdown("---")
 # 11. STRATEGY EXPLAINER GUIDE
 render_strategy_explainer(preset_sel)
 
-# 12. DATA QUALITY & METADATA FOOTER
-st.markdown(
-    f"<div class='glass-card' style='padding:12px 20px; font-size:0.8rem; color:#94A3B8; display:flex; justify-content:space-between; margin-top:20px;'>"
-    f"<div><b>Data Source</b>: Yahoo Finance &nbsp;|&nbsp; <b>Interval</b>: {interval} &nbsp;|&nbsp; <b>Period</b>: {period}</div>"
-    f"<div><b>Bars Loaded</b>: {len(df):,} &nbsp;|&nbsp; <b>Last Bar Date</b>: {df.index[-1].strftime('%Y-%m-%d')}</div>"
-    f"</div>",
-    unsafe_allow_html=True
-)

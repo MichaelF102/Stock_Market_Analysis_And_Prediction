@@ -121,15 +121,5 @@ def render_app_sidebar(page: str = "main") -> Dict[str, Any]:
             "Use the page menu at the top or navigate to **Prediction** to forecast returns for any NSE stock."
         )
 
-    # Sidebar Footer
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("""
-    <div style="font-size: 0.75rem; color: #64748B; line-height: 1.4;">
-        <div><b>Data Window:</b> 2015 – Aug 2026</div>
-        <div><b>Lookback:</b> 60 Trading Days</div>
-        <div><b>Forecast:</b> Live Date → Next 7 Days</div>
-        <div style="margin-top: 8px;">MSc Big Data Analytics Project</div>
-    </div>
-    """, unsafe_allow_html=True)
-
     return sidebar_controls
+

@@ -539,15 +539,3 @@ with tabs[8]:
         """
     )
 
-# ------------------------------------------------------------------------------
-# Footer
-# ------------------------------------------------------------------------------
-st.markdown("---")
-st.markdown(
-    """
-    <div style="text-align: center; color: #64748B; font-size: 0.82rem; padding: 12px 0;">
-        Quant-DL Institutional Equity Research Platform &bull; Built with Streamlit, ReportLab & TensorFlow &bull; Confidential
-    </div>
-    """,
-    unsafe_allow_html=True
-)

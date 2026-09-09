@@ -163,8 +163,6 @@ def render_sidebar():
     st.session_state["interval"] = interval
     st.session_state["selected_interval"] = interval
 
-    st.sidebar.markdown("---")
-    st.sidebar.caption("Made by Michael Fernandes")
-
     return ticker, company, exchange, period, interval, region
+
 

@@ -1377,13 +1377,3 @@ with tab_analysts:
                 use_container_width=True
             )
 
-st.markdown("---")
-
-# Footer metadata
-st.markdown(
-    f"<div class='glass-card' style='padding:12px 20px; font-size:0.8rem; color:#94A3B8; display:flex; justify-content:space-between; margin-top:20px;'>"
-    f"<div><b>Data Engine</b>: Real-Time Market Feed & Consolidated Corporate Filings</div>"
-    f"<div><b>Ticker</b>: {ticker} &nbsp;|&nbsp; <b>Exchange</b>: {exchange} &nbsp;|&nbsp; <b>Timestamp</b>: {today_str}</div>"
-    f"</div>",
-    unsafe_allow_html=True
-)

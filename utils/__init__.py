@@ -159,6 +159,18 @@ def inject_app_theme():
         border-color: #38BDF8;
         box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
     }
+
+    /* Hide Streamlit Default Footer and Menu */
+    footer {
+        visibility: hidden !important;
+        display: none !important;
+    }
+    #MainMenu {
+        visibility: hidden;
+    }
+    header {
+        visibility: visible;
+    }
     </style>
     """, unsafe_allow_html=True)
 

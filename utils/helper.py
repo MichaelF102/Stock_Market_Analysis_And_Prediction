@@ -245,6 +245,18 @@ def inject_custom_theme():
     .badge-cyan { background: rgba(56, 189, 248, 0.15); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.3); }
     .badge-amber { background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); }
     .badge-rose { background: rgba(244, 63, 94, 0.15); color: #F43F5E; border: 1px solid rgba(244, 63, 94, 0.3); }
+
+    /* Hide Streamlit Default Footer and Menu */
+    footer {
+        visibility: hidden !important;
+        display: none !important;
+    }
+    #MainMenu {
+        visibility: hidden;
+    }
+    header {
+        visibility: visible;
+    }
     </style>
     """, unsafe_allow_html=True)
 
