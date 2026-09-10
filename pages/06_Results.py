@@ -98,7 +98,7 @@ with kpi1:
     st.metric(
         label="Top Directional Accuracy",
         value="52.38%",
-        delta="+2.38% vs Zero Baseline (LightGBM)",
+        delta="LightGBM Seen Stocks (52.01% Unseen)",
         delta_color="normal"
     )
 with kpi2:

@@ -65,7 +65,6 @@ Quant-DL Application
 | **Bi-LSTM** | **Unseen Stocks** | 0.0502 | 0.0354 | **52.22%** | 0.0467 | **0.5892** |
 | **LSTM** | **Unseen Stocks** | 0.0501 | 0.0354 | **52.15%** | 0.0901 | 0.5738 |
 | **Simple RNN** | **Unseen Stocks** | 0.0504 | 0.0356 | 50.10% | 0.0348 | 0.3686 |
-| **Zero Baseline** | **Unseen Stocks** | 0.0502 | 0.0349 | 0.06% | 0.0000 | 0.0000 |
 
 > **Key Research Finding:** The Gated Recurrent Unit (GRU) achieved an Information Coefficient of **0.1207** and a positive $R^2$ on held-out stocks that were never seen during model training, confirming genuine cross-stock temporal feature transferability.
 
