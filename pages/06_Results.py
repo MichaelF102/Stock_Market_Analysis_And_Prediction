@@ -188,7 +188,7 @@ with tab_unified:
 
     if not df_unified.empty:
         # Interactive Controls
-        f_col1, f_col2, f_col3 = st.columns([1.2, 1.2, 1])
+        f_col1, f_col2, f_col3, f_col4 = st.columns([1.1, 1.1, 1.1, 1.3])
         with f_col1:
             dataset_options = ["All Partitions"] + sorted(df_unified["Dataset"].unique().tolist())
             sel_dataset = st.selectbox("Filter by Evaluation Partition", dataset_options, index=0)
@@ -197,19 +197,53 @@ with tab_unified:
             sel_family = st.selectbox("Filter by Model Family", family_options, index=0)
         with f_col3:
             sort_metric = st.selectbox(
-                "Sort Leaderboard By",
-                ["Directional_Accuracy (%)", "Information_Coefficient (IC)", "Strategy_Sharpe", "Strategy_Sortino", "Rank_IC", "RMSE"],
+                "Sort Table By",
+                ["Directional_Accuracy (%)", "Information_Coefficient (IC)", "Strategy_Sharpe", "Strategy_Sortino", "Rank_IC", "RMSE", "MAE", "R2"],
                 index=0
             )
+        with f_col4:
+            chart_metric = st.selectbox(
+                "📊 Bar Chart Comparison Metric",
+                [
+                    "Directional_Accuracy (%)",
+                    "Information_Coefficient (IC)",
+                    "Rank_IC",
+                    "Strategy_Sharpe",
+                    "Strategy_Sortino",
+                    "RMSE",
+                    "MAE",
+                    "R2"
+                ],
+                index=0,
+                format_func=lambda m: {
+                    "Directional_Accuracy (%)": "Directional Accuracy (%) [Higher is Better]",
+                    "Information_Coefficient (IC)": "Information Coefficient (IC) [Higher is Better]",
+                    "Rank_IC": "Rank IC (Spearman) [Higher is Better]",
+                    "Strategy_Sharpe": "Strategy Sharpe Ratio [Risk-Adjusted]",
+                    "Strategy_Sortino": "Strategy Sortino Ratio [Downside-Risk-Adjusted]",
+                    "RMSE": "Root Mean Squared Error (RMSE) [Lower is Better]",
+                    "MAE": "Mean Absolute Error (MAE) [Lower is Better]",
+                    "R2": "Coefficient of Determination (R²) [Higher is Better]"
+                }.get(m, m)
+            )
+
+        # Model Multi-Select Filter
+        all_models = sorted(df_unified["Model"].unique().tolist())
+        sel_models = st.multiselect(
+            "Select Models to Include in Comparison",
+            options=all_models,
+            default=all_models,
+            help="Filter specific models to compare side-by-side"
+        )
 
         # Apply Filtering
-        filtered_df = df_unified.copy()
+        filtered_df = df_unified[df_unified["Model"].isin(sel_models)].copy()
         if sel_dataset != "All Partitions":
             filtered_df = filtered_df[filtered_df["Dataset"] == sel_dataset]
         if sel_family != "All Model Types":
             filtered_df = filtered_df[filtered_df["Model_Family"] == sel_family]
 
-        ascending_sort = True if sort_metric == "RMSE" else False
+        ascending_sort = True if sort_metric in ["RMSE", "MAE"] else False
         filtered_df = filtered_df.sort_values(by=sort_metric, ascending=ascending_sort).reset_index(drop=True)
 
         # Format and display table
@@ -232,36 +266,71 @@ with tab_unified:
         st.markdown("---")
 
         # Interactive Charts Row
-        c_ch1, c_ch2 = st.columns(2)
+        c_ch1, c_ch2 = st.columns([1.2, 1])
 
         with c_ch1:
-            st.markdown("#### 🎯 Directional Accuracy (%) by Model & Partition")
-            # Create interactive bar chart
-            plot_df = df_unified[~df_unified["Model"].str.contains("Baseline")].copy()
-            fig_da = px.bar(
+            metric_titles = {
+                "Directional_Accuracy (%)": "Directional Accuracy (%) across Models",
+                "Information_Coefficient (IC)": "Information Coefficient (IC) Correlation Benchmark",
+                "Rank_IC": "Spearman Rank IC Benchmark",
+                "Strategy_Sharpe": "Annualized Strategy Sharpe Ratio",
+                "Strategy_Sortino": "Downside Risk-Adjusted Sortino Ratio",
+                "RMSE": "Root Mean Squared Error (Lower is Better)",
+                "MAE": "Mean Absolute Error (Lower is Better)",
+                "R2": "R² Explained Variance Ratio"
+            }
+            chart_title = metric_titles.get(chart_metric, f"{chart_metric} Comparison")
+            st.markdown(f"#### 📊 {chart_title}")
+
+            plot_df = df_unified[df_unified["Model"].isin(sel_models)].copy()
+            if sel_dataset != "All Partitions":
+                plot_df = plot_df[plot_df["Dataset"] == sel_dataset]
+
+            # Dynamic bar chart based on selected metric
+            fig_bar = px.bar(
                 plot_df,
                 x="Model",
-                y="Directional_Accuracy (%)",
+                y=chart_metric,
                 color="Dataset",
                 barmode="group",
+                text=chart_metric,
                 color_discrete_sequence=["#38BDF8", "#10B981", "#F59E0B"],
-                title="Directional Accuracy Benchmark (50% = Random Walk)"
+                title=f"Comparative Benchmark: {chart_metric}"
             )
-            fig_da.add_hline(
-                y=50.0,
-                line_dash="dash",
-                line_color="#EF4444",
-                annotation_text="50% Uninformative Baseline",
-                annotation_position="bottom right"
-            )
-            fig_da.update_layout(
-                yaxis=dict(range=[48.0, 56.0]),
+
+            # Format bar labels based on metric type
+            if chart_metric == "Directional_Accuracy (%)":
+                fig_bar.update_traces(texttemplate='%{y:.2f}%', textposition='outside')
+                fig_bar.add_hline(
+                    y=50.0,
+                    line_dash="dash",
+                    line_color="#EF4444",
+                    annotation_text="50% Random Walk",
+                    annotation_position="bottom right"
+                )
+                min_y = max(45.0, plot_df[chart_metric].min() - 2.0)
+                max_y = plot_df[chart_metric].max() + 2.5
+                fig_bar.update_layout(yaxis=dict(range=[min_y, max_y]))
+            elif chart_metric in ["Information_Coefficient (IC)", "Rank_IC", "Strategy_Sharpe", "Strategy_Sortino"]:
+                fig_bar.update_traces(texttemplate='%{y:+.4f}', textposition='outside')
+                fig_bar.add_hline(
+                    y=0.0,
+                    line_dash="dash",
+                    line_color="#EF4444",
+                    annotation_text="0.0 Zero Alpha Baseline",
+                    annotation_position="bottom right"
+                )
+            elif chart_metric in ["RMSE", "MAE", "R2"]:
+                fig_bar.update_traces(texttemplate='%{y:.4f}', textposition='outside')
+
+            fig_bar.update_layout(
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(15, 23, 42, 0.4)",
                 font=dict(color="#94A3B8"),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                margin=dict(t=40, b=20)
             )
-            st.plotly_chart(fig_da, use_container_width=True)
+            st.plotly_chart(fig_bar, use_container_width=True)
 
         with c_ch2:
             st.markdown("#### ⚡ Risk-Adjusted Alpha Engine (Sharpe vs. IC)")
@@ -282,7 +351,8 @@ with tab_unified:
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(15, 23, 42, 0.4)",
                 font=dict(color="#94A3B8"),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                margin=dict(t=40, b=20)
             )
             st.plotly_chart(fig_scatter, use_container_width=True)
 
