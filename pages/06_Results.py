@@ -112,7 +112,7 @@ with kpi3:
     st.metric(
         label="Top Cross-Stock Generalizer",
         value="0.1207 IC",
-        delta="GRU Held-Out Unseen Stocks (R²: +0.0002)",
+        delta="GRU Held-Out Unseen Stocks (R²: +0.1002)",
         delta_color="normal"
     )
 with kpi4:
