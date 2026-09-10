@@ -117,7 +117,7 @@ with nav1:
         </p>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/01_DL_Prediction.py", label="Open Deep Learning Terminal →", icon="🧠")
+    st.page_link("pages/04_DL_Terminal.py", label="Open Deep Learning Terminal →", icon="🧠")
 
 with nav2:
     st.markdown("""
@@ -139,7 +139,7 @@ with nav3:
         </p>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/03_Fundamentals.py", label="Open Fundamentals Terminal →", icon="🏛️")
+    st.page_link("pages/01_Fundamentals_Terminal.py", label="Open Fundamentals Terminal →", icon="🏛️")
 
 st.markdown("<div style='margin-bottom: 8px;'></div>", unsafe_allow_html=True)
 
@@ -154,7 +154,7 @@ with nav4:
         </p>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/04_ML_Prediction.py", label="Open ML Ensembles Terminal →", icon="🌲")
+    st.page_link("pages/03_ML_Terminal.py", label="Open ML Ensembles Terminal →", icon="🌲")
 
 with nav5:
     st.markdown("""
@@ -165,7 +165,7 @@ with nav5:
         </p>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/05_Report_Generation.py", label="Generate Research Report →", icon="📑")
+    st.page_link("pages/06_Report_Generation.py", label="Generate Research Report →", icon="📑")
 
 with nav6:
     st.markdown("""
@@ -176,7 +176,7 @@ with nav6:
         </p>
     </div>
     """, unsafe_allow_html=True)
-    st.page_link("pages/06_Results.py", label="View Empirical Leaderboard →", icon="🏆")
+    st.page_link("pages/05_Results.py", label="View Empirical Leaderboard →", icon="🏆")
 
 st.markdown("---")
 
@@ -618,21 +618,3 @@ with col_g2:
         st.write("Market-cap breakdown available in research report.")
 
 st.markdown("---")
-
-# ------------------------------------------------------------------------------
-# Section 8: Academic Disclaimer & Limitations
-# ------------------------------------------------------------------------------
-st.subheader("8. Academic Disclaimer & Econometric Limitations")
-st.markdown("""
-<div class="research-card" style="border-left: 4px solid #F59E0B;">
-    <h4 style="color: #F59E0B; margin-top: 0;">Statistical Forecasting vs. Real-World Execution</h4>
-    <p style="color: #CBD5E1; font-size: 0.9rem; line-height: 1.6;">
-        <b>1. Statistical Edge ≠ Arbitrage:</b> A directional accuracy of 52–53% confirms statistical transferability, 
-        but does <i>not</i> guarantee profitable algorithmic trading. Real-world execution must account for Securities Transaction Tax (STT), 
-        exchange transaction charges, stamp duty, brokerage, and market impact slippage.<br>
-        <b>2. Structural Non-Stationarity:</b> Financial time series exhibit regime shifts. Macroeconomic volatility spikes, 
-        liquidity shocks, or monetary tightening may alter the conditional return distribution relative to historical training periods.<br>
-        <b>3. Research Scope:</b> This application is built as an MSc Big Data Analytics research artifact and quantitative intelligence demonstrator; it does not constitute investment advice.
-    </p>
-</div>
-""", unsafe_allow_html=True)

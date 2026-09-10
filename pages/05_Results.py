@@ -227,13 +227,21 @@ with tab_unified:
                 }.get(m, m)
             )
 
-        # Model Multi-Select Filter
-        all_models = sorted(df_unified["Model"].unique().tolist())
+        # Dynamic Model Selection based on Family filter
+        if sel_family == "Deep Learning (Recurrent)":
+            available_models = sorted(df_unified[df_unified["Model_Family"] == "Deep Learning (Recurrent)"]["Model"].unique().tolist())
+        elif sel_family == "Machine Learning (Ensemble)":
+            available_models = sorted(df_unified[df_unified["Model_Family"] == "Machine Learning (Ensemble)"]["Model"].unique().tolist())
+        else:
+            available_models = sorted(df_unified["Model"].unique().tolist())
+
+        # Model Multi-Select Filter keyed dynamically by sel_family so models are automatically applied
         sel_models = st.multiselect(
-            "Select Models to Include in Comparison",
-            options=all_models,
-            default=all_models,
-            help="Filter specific models to compare side-by-side"
+            f"Select Models to Include in Comparison ({len(available_models)} available)",
+            options=available_models,
+            default=available_models,
+            key=f"sel_models_key_{sel_family}",
+            help="Filter specific models to compare side-by-side. Automatically updates when Model Family changes."
         )
 
         # Apply Filtering
@@ -285,6 +293,8 @@ with tab_unified:
             plot_df = df_unified[df_unified["Model"].isin(sel_models)].copy()
             if sel_dataset != "All Partitions":
                 plot_df = plot_df[plot_df["Dataset"] == sel_dataset]
+            if sel_family != "All Model Types":
+                plot_df = plot_df[plot_df["Model_Family"] == sel_family]
 
             # Dynamic bar chart based on selected metric
             fig_bar = px.bar(
