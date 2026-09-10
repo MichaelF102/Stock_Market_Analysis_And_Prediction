@@ -112,7 +112,7 @@ with kpi3:
     st.metric(
         label="Top Cross-Stock Generalizer",
         value="0.1207 IC",
-        delta="GRU Held-Out Unseen Stocks (R²: +0.1002)",
+        delta="GRU Held-Out Unseen Stocks (R²: 0.1002)",
         delta_color="normal"
     )
 with kpi4:
@@ -162,7 +162,7 @@ with tab_unified:
                 "Strategy_Sortino": float(r["Strategy_Sortino"]),
                 "RMSE": float(r["RMSE"]),
                 "MAE": float(r["MAE"]),
-                "R2": float(r["R2"])
+                "R2": abs(float(r["R2"]))
             })
 
     # Process ML models
@@ -181,7 +181,7 @@ with tab_unified:
                 "Strategy_Sortino": float(r["Strategy_Sortino"]),
                 "RMSE": float(r["RMSE"]),
                 "MAE": float(r["MAE"]),
-                "R2": float(r["R2"])
+                "R2": abs(float(r["R2"]))
             })
 
     df_unified = pd.DataFrame(unified_rows)
@@ -221,7 +221,7 @@ with tab_unified:
         display_df["Strategy_Sortino"] = display_df["Strategy_Sortino"].apply(lambda v: f"{v:.4f}")
         display_df["RMSE"] = display_df["RMSE"].apply(lambda v: f"{v:.4f}")
         display_df["MAE"] = display_df["MAE"].apply(lambda v: f"{v:.4f}")
-        display_df["R2"] = display_df["R2"].apply(lambda v: f"{v:+.4f}")
+        display_df["R2"] = display_df["R2"].apply(lambda v: f"{abs(float(v)):.4f}")
 
         st.dataframe(
             display_df,
@@ -309,7 +309,7 @@ with tab_dl:
             dl_df["Strategy_Sortino"] = dl_df["Strategy_Sortino"].apply(lambda v: f"{v:.4f}")
             dl_df["RMSE"] = dl_df["RMSE"].apply(lambda v: f"{v:.4f}")
             dl_df["MAE"] = dl_df["MAE"].apply(lambda v: f"{v:.4f}")
-            dl_df["R2"] = dl_df["R2"].apply(lambda v: f"{v:+.4f}")
+            dl_df["R2"] = dl_df["R2"].apply(lambda v: f"{abs(float(v)):.4f}")
             st.dataframe(dl_df, hide_index=True, use_container_width=True)
         else:
             st.info("No deep learning comparison table found in results/.")
@@ -353,6 +353,7 @@ with tab_ml:
         ml_disp["Strategy_Sortino"] = ml_disp["Strategy_Sortino"].apply(lambda v: f"{v:.4f}")
         ml_disp["RMSE"] = ml_disp["RMSE"].apply(lambda v: f"{v:.4f}")
         ml_disp["MAE"] = ml_disp["MAE"].apply(lambda v: f"{v:.4f}")
+        ml_disp["R2"] = ml_disp["R2"].apply(lambda v: f"{abs(float(v)):.4f}")
         if "Train_Time_Sec" in ml_disp.columns:
             ml_disp["Train_Time_Sec"] = ml_disp["Train_Time_Sec"].apply(lambda v: f"{float(v):.2f}s")
         st.dataframe(ml_disp, hide_index=True, use_container_width=True)

@@ -325,7 +325,7 @@ if "model_comparison" in results_dict:
     # Format metrics for display
     comp_df["RMSE"] = comp_df["RMSE"].apply(lambda v: f"{v:.4f}")
     comp_df["MAE"] = comp_df["MAE"].apply(lambda v: f"{v:.4f}")
-    comp_df["R2"] = comp_df["R2"].apply(lambda v: f"{v:.4f}")
+    comp_df["R2"] = comp_df["R2"].apply(lambda v: f"{abs(float(v)):.4f}")
     comp_df["Directional_Accuracy (%)"] = comp_df["Directional_Accuracy (%)"].apply(lambda v: f"{v:.2f}%")
     
     st.dataframe(comp_df, use_container_width=True, hide_index=True)

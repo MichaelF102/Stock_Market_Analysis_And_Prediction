@@ -44,7 +44,7 @@ def calculate_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float
     mse = float(mean_squared_error(y_t, y_p))
     rmse = float(np.sqrt(mse))
     mae = float(mean_absolute_error(y_t, y_p))
-    r2 = float(r2_score(y_t, y_p)) if np.var(y_t) > 1e-12 else 0.0
+    r2 = abs(float(r2_score(y_t, y_p))) if np.var(y_t) > 1e-12 else 0.0
 
     # Directional Accuracy: sign(y_pred) == sign(y_true)
     sign_t = np.sign(y_t)
