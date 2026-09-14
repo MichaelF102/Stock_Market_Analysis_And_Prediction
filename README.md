@@ -19,6 +19,7 @@ An institutional-grade quantitative finance research platform and interactive we
 - **Strict Anti-Leakage Protocol:** StandardScaler and transformations fitted strictly on the 2015–2021 training block; temporal lookahead and cross-stock sequence overlaps are mathematically prevented.
 - **Dual Out-of-Sample Evaluation:** Evaluated on both temporal out-of-sample data (2024–2026 for seen stocks) and cross-sectional held-out stocks (26 tickers never seen during training).
 - **Full-Featured 6-Module Institutional Dashboard:** Interactive terminal offering fundamental intelligence & forensics, technical charting, ML tree ensembles, recurrent deep learning forecasts, empirical results leaderboards, and automated 9-page institutional PDF research dossiers.
+- **Standalone `ml_dl/` Reusable Suite:** Decoupled, production-ready ML & DL component folder ready to be dropped into any other quantitative project for instant training and single-stock inference.
 
 ---
 
@@ -210,6 +211,39 @@ Open [`Indian_Equity_ML_and_DL_Training_Pipeline.ipynb`](file:///home/michaelfer
 
 ---
 
+### 6. Reusing ML & DL Components in Another Project (`ml_dl/`)
+
+The repository includes a dedicated, self-contained [`ml_dl/`](file:///home/michaelfernandes/Desktop/Projects/Quant-DL/ml_dl) folder designed for zero-friction reuse in external projects.
+
+#### Quick CLI Inference:
+```bash
+# Run prediction on any stock ticker using Deep Learning (GRU / LSTM)
+python ml_dl/inference.py --ticker RELIANCE.NS --model GRU
+
+# Run prediction using Tree Ensembles (XGBoost / LightGBM)
+python ml_dl/inference.py --ticker TCS.NS --model XGBoost
+```
+
+#### Reusing in Python:
+```python
+from ml_dl.inference import fetch_historical_ohlcv, predict_stock_dl, predict_stock_ml, load_scaler
+
+# 1. Fetch market data
+stock_df = fetch_historical_ohlcv("RELIANCE.NS")
+nifty_df = fetch_historical_ohlcv("^NSEI")
+scaler = load_scaler()
+
+# 2. Predict with GRU Deep Learning
+dl_res = predict_stock_dl(stock_df, nifty_df, model_name="GRU", scaler=scaler)
+print(f"GRU Return: {dl_res['predicted_return_pct']:+.2f}% | Target: ₹{dl_res['estimated_target_price']:.2f}")
+
+# 3. Predict with XGBoost
+ml_res = predict_stock_ml(stock_df, nifty_df, model_name="XGBoost", scaler=scaler)
+print(f"XGBoost Return: {ml_res['predicted_return_pct']:+.2f}% | Target: ₹{ml_res['estimated_target_price']:.2f}")
+```
+
+---
+
 ## 📁 Project Directory Structure
 
 ```text
@@ -220,6 +254,16 @@ Stock_Market_Analysis_And_Prediction/
 ├── run_pipeline.py                                # End-to-End DL Pipeline Runner
 ├── train_ml_models.py                             # ML Model Training & Evaluation Script
 ├── Indian_Equity_ML_and_DL_Training_Pipeline.ipynb # Complete ML & DL Pipeline Notebook
+│
+├── ml_dl/                                         # 📦 Standalone Reusable ML & DL Module
+│   ├── inference.py                               # Reusable single-stock & batch inference engine
+│   ├── train_ml.py                                # Standalone training for ML models
+│   ├── train_dl.py                                # Standalone training for DL recurrent models
+│   ├── run_pipeline.py                            # Self-contained ML/DL pipeline runner
+│   ├── requirements.txt                           # Minimal dependencies for ML & DL
+│   ├── README.md                                  # Guide for reusing in other projects
+│   ├── src/                                       # Core features, sequences, models & evaluation
+│   └── notebooks/                                 # Dedicated research notebook
 │
 ├── pages/                                         # Multi-Page Streamlit Dashboards
 │   ├── 01_Fundamentals_Terminal.py                # 10-Year Financial Statements & Forensic Valuation
@@ -236,6 +280,7 @@ Stock_Market_Analysis_And_Prediction/
 │   ├── features.py                                # 31 Scale-Free Feature Engineering Logic
 │   ├── sequences.py                               # 60-Day Sliding Window Sequence Generator
 │   ├── models.py                                  # Keras Simple RNN, LSTM, GRU Architectures
+│   ├── ml_models.py                               # LightGBM, XGBoost, CatBoost, RF, Decision Tree
 │   ├── evaluation.py                              # Financial Metrics (IC, Sharpe, Sortino, DA)
 │   └── visualization.py                           # Matplotlib & Seaborn Publication Plots
 │

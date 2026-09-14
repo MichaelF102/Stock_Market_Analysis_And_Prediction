@@ -26,24 +26,32 @@ wheels/
 .installed.cfg
 *.egg
 
-# CatBoost Training Logs
+# CatBoost Training Logs & Metadata
 catboost_info/
 
 # Jupyter Notebook Checkpoints
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
 
-# IDE & Editor Settings
+# IDE, OS & Editor Settings
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+Thumbs.db
 
-# Temporary Test Files and Image Renders
+# Test & Debugging Logs
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary Test Files, Image Renders & Generated Report PDFs
 page_render-*.png
 test_page-*.png
 test_bg_page-*.png
 test_bg_sample.pdf
 test_reliance_report.pdf
+*_QuantDL_Institutional_Report.pdf
